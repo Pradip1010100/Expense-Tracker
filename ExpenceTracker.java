@@ -4,19 +4,16 @@ import javax.swing.*;
 public class ExpenceTracker  
 {
     JFrame ETFrame;
-    JMenuBar menuBar;
-    JMenu Record,Analysis,Budjet,Category;
-    JRootPane rootPane;
     ExpenceTracker()  
     {  
         ETFrame =  new JFrame("Expence Tracker");
         ETFrame.setDefaultCloseOperation(ETFrame.EXIT_ON_CLOSE);
-        rootPane = ETFrame.getRootPane();
-        menuBar = new JMenuBar();
-        Record = new JMenu("Record");
-        Analysis = new JMenu("Analysis");
-        Budjet = new JMenu("Budjet");
-        Category = new JMenu("Category");
+        JRootPane rootPane = ETFrame.getRootPane();
+        JMenuBar menuBar = new JMenuBar();
+        JMenu Record = new JMenu("Record");
+        JMenu Analysis = new JMenu("Analysis");
+        JMenu Budjet = new JMenu("Budjet");
+        JMenu Category = new JMenu("Category");
         menuBar.setLayout(new GridLayout(1, 4));
         menuBar.add(Record);
         menuBar.add(Analysis);
