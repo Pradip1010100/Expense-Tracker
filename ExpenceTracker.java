@@ -1,34 +1,34 @@
+
 import java.awt.*;    
 import javax.swing.*;    
     
 public class ExpenceTracker  
 {
     JFrame ETFrame;
-    JMenuBar menuBar;
-    JMenu Record,Analysis,Budjet,Category;
-    JRootPane rootPane;
     ExpenceTracker()  
     {  
         ETFrame =  new JFrame("Expence Tracker");
         ETFrame.setDefaultCloseOperation(ETFrame.EXIT_ON_CLOSE);
-        rootPane = ETFrame.getRootPane();
-        menuBar = new JMenuBar();
-        Record = new JMenu("Record");
-        Analysis = new JMenu("Analysis");
-        Budjet = new JMenu("Budjet");
-        Category = new JMenu("Category");
-        menuBar.setLayout(new GridLayout(1, 4));
-        menuBar.add(Record);
-        menuBar.add(Analysis);
-        menuBar.add(Budjet);
-        menuBar.add(Category);
-        menuBar.setBorderPainted(true);
-        ETFrame.add(menuBar);
-        rootPane.setJMenuBar(menuBar);
-        ETFrame.setJMenuBar(menuBar);
+        ETFrame.add(addMenuBar());
         ETFrame.setVisible(true);
         ETFrame.pack();
-    }    
+    }
+    JTabbedPane addMenuBar()
+    {
+        JTabbedPane tp=new JTabbedPane();
+        
+        JPanel record = new JPanel();
+        Record r = new Record();
+        record.add(r.recordPanel());
+        JPanel analysis = new JPanel();
+        JPanel budget = new JPanel();
+        JPanel category = new JPanel();
+        tp.add("Record",record);
+        tp.add("Analysis",analysis);
+        tp.add("Budjet",budget);
+        tp.add("Category",category);
+        return tp;
+    }
     
     // main method  
     public static void main(String argvs[])   
