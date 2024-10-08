@@ -23,7 +23,7 @@ public class Record{
             {
                 recordInput = new JDialog();
                 recordInput.setTitle("Enter Record Details");
-                recordInput.setSize(500, 500);
+                recordInput.setSize(300, 400);
                 recordInput.setLocationRelativeTo(jPRecord);
                 recordInput.add(newRecordPanel());
                 recordInput.setModal(true);
