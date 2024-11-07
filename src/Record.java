@@ -42,7 +42,12 @@ public class Record{
         String[][] recordsString = {};
 
         // Initialize table model and set data
-        tableModel = new DefaultTableModel(recordsString, header);
+        tableModel = new DefaultTableModel(recordsString, header){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Makes all cells non-editable
+            }
+        };
 
         // Initialize JTable with the table model
         records = new JTable(tableModel);

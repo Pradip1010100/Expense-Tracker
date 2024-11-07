@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.GridLayout;
 import java.awt.Dimension;
-import SQLiteConnection.*;
+import SQLiteConnection  .*;
 
 
 
@@ -40,7 +40,7 @@ public class ExpenseTracker
         p.setPreferredSize(new Dimension(1910,968));
         jFExpenseTracker.add(p);
         jFExpenseTracker.setVisible(true);
-        jFExpenseTracker.setBounds(0,0,500,500);
+        jFExpenseTracker.setBounds(0,0,600,650);
     }
 
     
