@@ -2,19 +2,21 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.GridLayout;
 import java.awt.Dimension;
-import SQLiteConnection  .*;
+// import SQLiteConnection.*;
 
 
 
 public class ExpenseTracker
 {
-    JFrame jFExpenseTracker;
+    static JFrame jFExpenseTracker;
     JButton jBRecord,jBAnalysis,jBBudget,jBCategory;
     Record r;
     Analysis a;
     Budget b;
     Category c;
     JPanel p;
+    static int xAxis;
+    static int yAxis;
     static int width;
     static int height;
 
@@ -43,7 +45,13 @@ public class ExpenseTracker
         jFExpenseTracker.setBounds(0,0,600,650);
     }
 
-    
+    public static void frameResetSize()
+    {
+        xAxis = jFExpenseTracker.getX();
+        yAxis = jFExpenseTracker.getY();
+        width = jFExpenseTracker.getWidth();
+        height = jFExpenseTracker.getHeight();
+    }
 
     public JPanel getjPExpenseTracker()
     {

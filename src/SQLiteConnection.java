@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 
 class SQLiteConnection {
@@ -66,7 +68,7 @@ class SQLiteConnection {
     }
 
     public static void addBudget(int id,double amount) {
-        String query = "INSERT INTO categories(cId,amount) VALUES (?,?);";
+        String query = "INSERT INTO budgets(cId,amount) VALUES (?,?);";
         try(Connection connected = DriverManager.getConnection(url)){
             PreparedStatement pstmt = connected.prepareStatement(query);
             pstmt.setInt(1, id);
@@ -79,14 +81,32 @@ class SQLiteConnection {
         }
     }
 
-    public static resultSet getRecord() {
+    public static ResultSet getRecord() {
         String query = "SELECT * FROM results;";
+        ResultSet resultSet;
         try(Connection connected = DriverManager.getConnection(url)){
             Statement stmt = connected.createStatement();
-            ResultSet resultSet =  stmt.executeQuery(query);
+            resultSet =  stmt.executeQuery(query);
             return resultSet;
         }catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }  
+        return null;
+    }
+
+    public static String[] getCategories(){
+        String query = "SELECT name FROM categories;";
+        List<String> categoriesSet = new ArrayList<String>();
+        try(Connection connected = DriverManager.getConnection(url)){
+            Statement stmt = connected.createStatement();
+            ResultSet resultSet =  stmt.executeQuery(query);
+            while(resultSet.next())
+            {
+                categoriesSet.add(resultSet.getString("name"));
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return categoriesSet.toArray(new String[0]);
+    }
 }

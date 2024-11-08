@@ -26,7 +26,12 @@ public class Record{
                 recordInput = new JDialog();
                 recordInput.setTitle("Enter Record Details");
                 recordInput.setSize(300, 400);
-                recordInput.setLocationRelativeTo(jPRecord);
+
+                ExpenseTracker.frameResetSize();        //set Location to the center
+                int dX = ExpenseTracker.xAxis + (ExpenseTracker.width - recordInput.getWidth())/2;
+                int dY = ExpenseTracker.yAxis + (ExpenseTracker.height - recordInput.getHeight())/2;
+                recordInput.setLocation(dX, dY);
+
                 recordInput.add(newRecordPanel());
                 recordInput.setModal(true);
                 recordInput.setVisible(true);
@@ -87,8 +92,10 @@ public class Record{
         GP.add(expense);
         JLabel enterCategory = new JLabel("Category : ");
         enterCategory.setBounds(50,150,60,30);
-        JTextField category = new JTextField("");
-        category.setBounds(120,150,100,30);
+        String[] categorySet = SQLiteConnection.getCategories();
+        JComboBox<String> selectC = new JComboBox<String>(categorySet);
+        // JTextField category = new JTextField("");
+        selectC.setBounds(120,150,100,30);
 
         JLabel enterAmount = new JLabel("Amount : ");
         enterAmount.setBounds(50,200,60,30);
@@ -110,7 +117,7 @@ public class Record{
                 if(source == save)
                 {
                     String recordName = name.getText();
-                    String recordCategory = category.getText();
+                    String recordCategory = (String)selectC.getSelectedItem();
                     String  ramount = amount.getText();
                     double recordAmount = Double.parseDouble(ramount); 
 
@@ -155,7 +162,7 @@ public class Record{
         newRecord.add(income);
         newRecord.add(expense);
         newRecord.add(enterCategory);
-        newRecord.add(category);
+        newRecord.add(selectC);
         newRecord.add(enterAmount);
         newRecord.add(amount);
         newRecord.add(save);
