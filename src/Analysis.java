@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 import javax.swing.JPanel;
 
 public class Analysis {
@@ -5,6 +7,7 @@ public class Analysis {
     public Analysis()
     {
         jPAnalysis = new JPanel();
+        jPAnalysis.setBackground(Color.decode("#607D8B"));
     }
     public JPanel getAnalysisPanel()
     {
