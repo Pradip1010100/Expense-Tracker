@@ -13,20 +13,20 @@ public class ExpenseTracker
 {
     static JFrame jFExpenseTracker;
     JButton jBRecord,jBAnalysis,jBBudget,jBCategory;
-    Record r;
-    Analysis a;
-    Budget b;
-    Category c;
+    static Record r;
+    static Analysis a;
+    static Budget b;
+    static Category c;
     // static ExpenseTracker expenseTracker;
     static int xAxis;
     static int yAxis;
     static int width;
     static int height;
 
-
     //Default Constructor For Expense Tracker
     public ExpenseTracker()
     {
+        //SQLiteConnection.dropAllTables();       //NOTE : If you want to delete all table then remove comments (Development Use)
         jFExpenseTracker = new JFrame("Expense Tracker");
         jFExpenseTracker.setDefaultCloseOperation(3);    //jFExpenseTracker.EXIT_ON_CLOSE
         jFExpenseTracker.getContentPane().setLayout(new BorderLayout());
@@ -61,7 +61,7 @@ public class ExpenseTracker
     static int allocateCenterByHeight(int ContainerHeight)
     {
         frameResetSize();
-        return ExpenseTracker.xAxis + (ExpenseTracker.height - ContainerHeight)/2;
+        return ExpenseTracker.yAxis + (ExpenseTracker.height - ContainerHeight)/2;
     }
 
     public JPanel getjPExpenseTracker()
@@ -75,10 +75,6 @@ public class ExpenseTracker
         
         gbc.weightx = 1.0;
         gbc.weighty = 0.0;
-        // gbc.anchor = GridBagConstraints.CENTER;
-        // gbc.gridwidth = 1;
-        //gbc.gridheight = 1;
-        // gbc.ipadx = 100;
         gbc.ipady = 20;
         //Adding Components to the Panel
         jBRecord = new JButton("Record");
@@ -101,16 +97,16 @@ public class ExpenseTracker
         gbc.gridx = 3;
         gbc.gridy = 0;
         jPET.add(jBCategory,gbc);
-        
+        jBRecord.setBackground(Color.decode("#67C6E3"));
         //Add Action Listeners to the buttons to switch between JPanel's
         ActionListener eTL = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                deSelectButton(jBRecord, jBAnalysis, jBBudget, jBCategory);
                 JButton source = (JButton)e.getSource();
-                System.out.println(jFExpenseTracker.getContentPane().getComponentCount());
+                source.setBackground(Color.decode("#67C6E3"));
                 jFExpenseTracker.getContentPane().remove(1);
-                // jFExpenseTracker.getComponent(1);
 
                 if(source == jBRecord)
                 {
@@ -143,10 +139,26 @@ public class ExpenseTracker
         
     }
 
+    void deSelectButton(JButton r,JButton a,JButton b,JButton c)
+    {
+        JButton source;
+        if(r.getBackground().equals(Color.decode("#67C6E3"))){
+            source = r;
+        }
+        else if(a.getBackground().equals(Color.decode("#67C6E3"))){
+            source = a;
+        }
+        else if(b.getBackground().equals(Color.decode("#67C6E3"))){
+            source = b;
+        }
+        else{
+            source = c;
+        }
+        source.setBackground(Color.decode("#29B6F6"));
+    }
 
     public static void main(String[] args)
     {
         ExpenseTracker e = new ExpenseTracker();
-        // expenseTracker = e;
     }
 }

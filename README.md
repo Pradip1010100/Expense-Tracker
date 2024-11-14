@@ -27,7 +27,7 @@ An **Expense Tracker** application designed to help users manage their personal 
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Pradip1010100/Expense-Tracker.git
    ```
 
 2. **Set up the SQLite database**:
@@ -35,12 +35,21 @@ An **Expense Tracker** application designed to help users manage their personal 
    - The database file will be created automatically when running the application for the first time.
 
 3. **Compile and run the application**:
+- Ensure Java is installed and the `java` command is in your PATH.
+- Open a terminal in the project directory and run:
    ```bash
    javac -cp .:lib/sqlite-jdbc-3.47.0.0.jar Main.java
    java -cp .:lib/sqlite-jdbc-3.47.0.0.jar Main
    ```
 
-4. **Launch the application**: You can start adding expenses and tracking your finances.
+4. **Double-Click to Run (Optional)**:
+- Open a terminal in the project directory and run:
+   ```bash
+     java -jar ExpenseTracker.jar
+   ```
+- If `.jar` files are associated with Java on your system, you can simply double-click `ExpenseTracker.jar` to start the application.
+
+5. **Launch the application**: You can start adding expenses and tracking your finances.
 
 ## Usage
 
@@ -82,3 +91,5 @@ Contributions are welcome! Please follow these steps:
 ## License
 
 This project is open-source and available under the [Pradip1010100 License](LICENSE).
+
+> Developed by [Pradip1010100](https://github.com/Pradip1010100)

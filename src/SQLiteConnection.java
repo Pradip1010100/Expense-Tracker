@@ -34,8 +34,27 @@ class SQLiteConnection {
         }
     }
 
+    public static void dropAllTables() {
+        String q1 = "DROP TABLE records;";
+        String q2 = "DROP TABLE budgets;";
+        String q3 = "DROP TABLE categories;";
+        try(Connection connected = DriverManager.getConnection(url)){
+            PreparedStatement pstmt = connected.prepareStatement(q1);
+            pstmt.executeUpdate();
+            pstmt = connected.prepareStatement(q2);
+            pstmt.executeUpdate();
+            pstmt = connected.prepareStatement(q3);
+            pstmt.executeUpdate();
+            System.out.println("All Tables are deleted");
+
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static void addRecord(String name,String type,double amount,String dt,int cId) {
         String query = "INSERT INTO records(name,type,amount,date,cId) VALUES (?,?,?,?,?);";
+        String q2 = "UPDATE categories SET spent = spent + ? WHERE name = ?;";
         try(Connection connected = DriverManager.getConnection(url)){
             PreparedStatement pstmt = connected.prepareStatement(query);
             pstmt.setString(1, name);
@@ -45,6 +64,12 @@ class SQLiteConnection {
             pstmt.setInt(5, cId);
             pstmt.executeUpdate();
             System.out.println("Record Inserted Successfully");
+
+            pstmt = connected.prepareStatement(q2);
+            pstmt.setDouble(1, amount);
+            pstmt.setString(2,type);
+            pstmt.executeUpdate();
+            System.out.println("Spent Updated");
 
         }catch (SQLException e) {
             System.out.println(e.getMessage());

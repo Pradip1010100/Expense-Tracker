@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.*;
@@ -17,12 +18,11 @@ public class Record{
     public Record() {
         // Initialize JPanel and set its layout
         jPRecord = new JPanel();
-        jPRecord.setLayout(new BoxLayout(jPRecord, BoxLayout.Y_AXIS));
+        jPRecord.setLayout(new BorderLayout());
         jPRecord.setBackground(Color.decode("#BDBDBD"));
         // Initialize JButton
         NewRecord = new JButton("Add New Record");
-        NewRecord.setBackground(Color.decode("#76FF03"));
-        NewRecord.setAlignmentX(Component.CENTER_ALIGNMENT);
+        NewRecord.setBackground(Color.decode("#00E676"));
         ActionListener addNewRecord = new ActionListener()
         {
             @Override
@@ -53,13 +53,13 @@ public class Record{
         };
         // Initialize JTable with the table model
         records = new JTable(tableModel);
-        records.getTableHeader().setBackground(Color.decode("#536DFE"));
+        records.getTableHeader().setBackground(Color.decode("#F96E2A"));
         // Add table to JScrollPane
         JScrollPane scrollTable = new JScrollPane(records);
-        scrollTable.getViewport().setBackground(Color.decode("#BDBDBD"));
+        scrollTable.getViewport().setBackground(Color.decode("#EAD8B1"));
         // Add components to JPanel
-        jPRecord.add(NewRecord);
-        jPRecord.add(scrollTable);
+        jPRecord.add(NewRecord,BorderLayout.PAGE_START);
+        jPRecord.add(scrollTable,BorderLayout.CENTER);
         initRecord();
     }
 
@@ -127,7 +127,6 @@ public class Record{
                     String type = "";
                     int t = -1;
                     for (int i = 0; i < categorySet.length; i++) {
-                        // categoryNames[i] = categorySet[i][0];
                         if(categoryNames[i].equals(recordCategory))
                         {
                             type = categorySet[i][1];
@@ -145,6 +144,7 @@ public class Record{
                     SQLiteConnection.addRecord(recordName, recordCategory, recordAmount, recordDateTime,t);
                     // Add new row to the table model
                     addRecord(newRecordInfo);
+                    ExpenseTracker.b.refreshBudgetPanel();
                 }
                 else if(source == close)
                 {

@@ -1,10 +1,14 @@
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -25,16 +29,15 @@ public class Budget {
     {
         jPBudget = new JPanel();
         budgets = new JPanel();
-        jPBudget.setLayout(new BoxLayout(jPBudget, BoxLayout.Y_AXIS));
+        jPBudget.setLayout(new BorderLayout());
 
-        // budgets.setLayout(new BoxLayout(budgets, BoxLayout.Y_AXIS));
-        budgets.setLayout(new GridBagLayout());
+        budgets.setLayout(new BoxLayout(budgets,BoxLayout.Y_AXIS));
         budgets.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // budgets.setBackground(Color.DARK_GRAY);
+        budgets.setBackground(Color.decode("#ECFFE6"));
 
         JButton setBudget = new JButton("Set Budget");
-        setBudget.setBackground(Color.decode("#76FF03"));
-        setBudget.setAlignmentX(Component.CENTER_ALIGNMENT);
+        setBudget.setBackground(Color.decode("#00E676"));
+
         ActionListener sB = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
@@ -47,8 +50,8 @@ public class Budget {
         scrollBudgets.setForeground(Color.CYAN);
         scrollBudgets.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollBudgets.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jPBudget.add(setBudget);
-        jPBudget.add(scrollBudgets);
+        jPBudget.add(setBudget,BorderLayout.PAGE_START);
+        jPBudget.add(scrollBudgets,BorderLayout.CENTER);
         initBudget();
     }
 
@@ -56,50 +59,51 @@ public class Budget {
     {
         String[][] budgetSet = SQLiteConnection.getBudgets();
         for (int i = 0; i < budgetSet.length; i++) {
-            addBudget(budgetSet[i][0],budgetSet[i][1],Double.parseDouble(budgetSet[i][2]),Double.parseDouble(budgetSet[i][3]));
+            addBudget(budgetSet[i][0],Double.parseDouble(budgetSet[i][2]),Double.parseDouble(budgetSet[i][3]));
         }
     }
 
-void addBudget(String category,String type,double limit,double spent)
+    void refreshBudgetPanel()
+    {
+        budgets.removeAll();
+        initBudget();
+    }
+
+void addBudget(String category,double limit,double spent)
     {
         //Name ,Type ,Limit ,Spent
         JPanel b = new JPanel();
-        b.setLayout(new GridBagLayout());
-        b.setBackground(Color.LIGHT_GRAY);
-        b.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        b.setLayout(new BorderLayout());
+        b.setPreferredSize(new Dimension(300,60));
+        b.setMaximumSize(new Dimension(2000,60));
         JLabel categoryName = new JLabel("Name : "+category);
-        JLabel categoryType =  new JLabel("Type : "+type);
         JLabel categoryLimit = new JLabel("Limit : " +limit+"₹");
         JLabel categorySpent = new JLabel("Spent : "+spent+"₹");
+        JButton edit = new JButton("...");
+        edit.setBackground(Color.decode("#00E676"));
+        edit.setPreferredSize(new Dimension(50,40));
 
+        JPanel mainAddPanel = new JPanel();
+        mainAddPanel.setLayout(new BorderLayout());
+        mainAddPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        mainAddPanel.setPreferredSize(new Dimension(350,60));
+        mainAddPanel.setMaximumSize(new Dimension(2000,60));
+        if(limit>spent){
+            b.setBackground(Color.decode("#9DDE8B"));
+            mainAddPanel.setBackground(Color.decode("#9DDE8B"));
+        }
+        else{
+            b.setBackground(Color.decode("#F44336"));
+            mainAddPanel.setBackground(Color.decode("#F44336")); 
+        }
+        b.add(categoryName,BorderLayout.PAGE_START);
+        b.add(categoryLimit,BorderLayout.WEST);
+        b.add(categorySpent,BorderLayout.EAST);
         
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 0.0;
-        gbc.weighty = 0.0;
-
-        // gbc.anchor = GridBagConstraints.CENTER;
-        // gbc.gridwidth = 1;
-        // gbc.gridheight = 1;
-        gbc.ipadx = 60;
-        // gbc.ipady = 12;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        b.add(categoryName,gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        b.add(categoryType,gbc);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        b.add(categoryLimit,gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        b.add(categorySpent,gbc);
-        gbc.ipadx = 0;
-        gbc.ipady = 30;
-        gbc.gridx = 0;
-        gbc.gridy = YINC++;
-        budgets.add(b,gbc);
+        
+        mainAddPanel.add(b,BorderLayout.LINE_START);
+        mainAddPanel.add(edit,BorderLayout.LINE_END);
+        budgets.add(mainAddPanel);
         budgets.revalidate();
         budgets.repaint();
     }
@@ -115,11 +119,14 @@ void addBudget(String category,String type,double limit,double spent)
         info.setTitle("Enter Budget");
 
         String[][] categorySet = SQLiteConnection.getCategories();
-        String[] categoryNames = new String[categorySet.length];
+        List<String> categoryNames = new ArrayList<String>();
         for (int i = 0; i < categorySet.length; i++) {
-            categoryNames[i] = categorySet[i][0]; 
+            if(categorySet[i][1].equals("Expense"))
+            {
+                categoryNames.add(categorySet[i][0]);
+            }
         }
-        JComboBox<String> selectC = new JComboBox<String>(categoryNames);
+        JComboBox<String> selectC = new JComboBox<String>(categoryNames.toArray(new String[0]));
         selectC.setBounds(40, 40, 160, 30);
         JTextField budget = new JTextField();
         budget.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -138,10 +145,9 @@ void addBudget(String category,String type,double limit,double spent)
                     String category = (String)selectC.getSelectedItem();
                     Object[] cInfo = SQLiteConnection.getCategoryIdTypeSpent(category);
                     int  id = (int)cInfo[0];
-                    String type = (String)cInfo[1];
                     double spent = (double)cInfo[2];
                     SQLiteConnection.addBudget(id,limit);
-                    addBudget(category,type,limit,spent);
+                    addBudget(category,limit,spent);
                 }
                 else if(source == close)
                 {

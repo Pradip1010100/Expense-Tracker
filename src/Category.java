@@ -1,7 +1,8 @@
 import javax.swing.*;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.*;
@@ -11,63 +12,61 @@ public class Category {
     JPanel jPCategory;
     JPanel incomeCategory;
     JPanel expenseCategory;
-    static int icPanelWidth = 0;
-    static int icPanelHeight = 0;
-    static int iePanelWidth = 0;
-    static int iePanelHeight = 0;
     public Category()
     {
 
         jPCategory = new JPanel();
-        jPCategory.setLayout(new BoxLayout(jPCategory,BoxLayout.Y_AXIS));
-        jPCategory.setBackground(Color.decode("#f0f0f0"));
-
+        jPCategory.setLayout(new BorderLayout()); 
         JPanel ieP = new JPanel();
         ieP.setLayout(new BoxLayout(ieP, BoxLayout.X_AXIS));
-        ieP.setBackground(Color.LIGHT_GRAY);
-        ieP.setMaximumSize(new Dimension(600,500));
 
-        incomeCategory = new JPanel();
-        // incomeCategory.setLayout(new BoxLayout(incomeCategory,BoxLayout.Y_AXIS));
-        incomeCategory.setLayout(null);
-        // incomeCategory.setMaximumSize(new Dimension(100,100));
-        incomeCategory.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        JPanel incomeMainPanel = new JPanel();
+        incomeMainPanel.setLayout(new BorderLayout());
+        incomeMainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
+        JPanel il = new JPanel();
         JLabel incomeLabel = new JLabel("Income Categories");
-        incomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        icPanelHeight = incomeLabel.getHeight();
         incomeLabel.setFont(new Font("Arial",Font.BOLD,14));
-        incomeLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        incomeCategory.add(incomeLabel);
+        il.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        il.add(incomeLabel);
+        il.setBackground(Color.decode("#508C9B"));
 
+        // Income Category Panel
+        incomeCategory = new JPanel();
+        incomeCategory.setLayout(new BoxLayout(incomeCategory,BoxLayout.Y_AXIS)); 
+        incomeCategory.setBackground(Color.decode("#FFB1B1"));
         JScrollPane scrollPaneI = new JScrollPane(incomeCategory);
         scrollPaneI.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPaneI.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
+        JPanel expenseMainPanel = new JPanel();
+        expenseMainPanel.setLayout(new BorderLayout());
+        expenseMainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        //Expense Category Panel
+        
+        JPanel el = new JPanel();
+        JLabel expenseLabel = new JLabel("Expense Categories   ");
+        expenseLabel.setFont(new Font("Arial",Font.BOLD,14));
+        el.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        el.add(expenseLabel);
+        el.setBackground(Color.decode("#508C9B"));
 
         expenseCategory = new JPanel();
-        // expenseCategory.setLayout(new BoxLayout(expenseCategory,BoxLayout.Y_AXIS));
-        expenseCategory.setLayout(null);
-        // expenseCategory.setMinimumSize(new Dimension(100,100));
-        expenseCategory.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        JLabel expenseLabel = new JLabel("Expense Categories   ");
-        expenseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        expenseLabel.setFont(new Font("Arial",Font.BOLD,14));
-        expenseLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        iePanelHeight = expenseLabel.getHeight();
-        expenseCategory.add(expenseLabel);
-
+        expenseCategory.setLayout(new BoxLayout(expenseCategory,BoxLayout.Y_AXIS));
+        expenseCategory.setBackground(Color.decode("#FFFF8D"));
         JScrollPane scrollPaneE = new JScrollPane(expenseCategory);
-        scrollPaneE.setForeground(Color.CYAN);
         scrollPaneE.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPaneE.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        ieP.add(scrollPaneI);
-        ieP.add(scrollPaneE);
+        incomeMainPanel.add(il,BorderLayout.PAGE_START);
+        incomeMainPanel.add(scrollPaneI,BorderLayout.CENTER);
+        expenseMainPanel.add(el,BorderLayout.PAGE_START);
+        expenseMainPanel.add(scrollPaneE,BorderLayout.CENTER);
+        ieP.add(incomeMainPanel);
+        ieP.add(expenseMainPanel);
 
         JButton newCategory = new JButton("New Category   "); 
-        newCategory.setBackground(Color.decode("#76FF03"));
+        newCategory.setBackground(Color.decode("#00E676"));
         ActionListener newC = new ActionListener() 
         {
             @Override
@@ -77,10 +76,8 @@ public class Category {
             }
         };
         newCategory.addActionListener(newC);
-        newCategory.setAlignmentX(Component.CENTER_ALIGNMENT);
-        jPCategory.add(newCategory);
-        ieP.setAlignmentX(Container.CENTER_ALIGNMENT);
-        jPCategory.add(ieP);
+        jPCategory.add(newCategory,BorderLayout.PAGE_START);
+        jPCategory.add(ieP,BorderLayout.CENTER);
         initCategory();
     }
 
@@ -159,41 +156,30 @@ public class Category {
     //Add Category to the jPCategory Panel (incomeCategory or expenseCategory)
     void addCategory(String Name,String type)
     {
-        // JPanel l = new JPanel();
-        // l.setLayout(new BoxLayout(l,BoxLayout.Y_AXIS));
-        // l.setBackground(Color.CYAN);
-        // JPanel b = new JPanel();
-        // b.setLayout(new BoxLayout(b,BoxLayout.Y_AXIS));
-        // b.setBackground(Color.DARK_GRAY);
+        JPanel l = new JPanel();
+        l.setLayout(new BorderLayout());
+        l.setBackground(Color.decode("#F9DBBA"));
+        l.setPreferredSize(new Dimension(200,30));
+        l.setMaximumSize(new Dimension(1000,30));
+        l.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel labelName = new JLabel("  "+Name+"  ");
         labelName.setFont(new Font("Arial",Font.PLAIN,15));
         labelName.setOpaque(true);
+        labelName.setPreferredSize(new Dimension(200,30));
         JButton edit = new JButton("...");
-        // l.add(labelName);  //,JPanel.LEFT_ALIGNMENT
-        // b.add(edit);   //,JPanel.RIGHT_ALIGNMENT
+        edit.setBackground(Color.decode("#00E676"));
+        edit.setPreferredSize(new Dimension(50,30));
+        l.add(labelName,BorderLayout.LINE_START);
+        l.add(edit,BorderLayout.LINE_END);
+        labelName.setBackground(Color.decode("#F9DBBA"));
 
-        // JPanel lb = new JPanel();
-        // lb.setLayout(new BoxLayout(lb,BoxLayout.X_AXIS));
-        // lb.setBackground(Color.LIGHT_GRAY);
-        // lb.add(l);
-        // lb.add(b);
         if(type.equals("Income"))
         {
-            // incomeCategory.add(lb);
-            labelName.setBounds(0,icPanelHeight,100,30);
-            edit.setBounds(200,icPanelHeight,40,30);
-            icPanelHeight += 30;
-            incomeCategory.add(labelName);
-            incomeCategory.add(edit);
+            incomeCategory.add(l);
         }
         else if(type.equals("Expense"))
         {
-            // expenseCategory.add(lb);
-            labelName.setBounds(0,iePanelHeight,100,30);
-            edit.setBounds(200,iePanelHeight,40,30);
-            iePanelHeight += 30;
-            expenseCategory.add(labelName);
-            expenseCategory.add(edit);
+            expenseCategory.add(l);
         }
         jPCategory.revalidate();
         jPCategory.repaint();
