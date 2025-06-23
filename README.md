@@ -90,6 +90,6 @@ Contributions are welcome! Please follow these steps:
 
 ## License
 
-This project is open-source and available under the [Pradip1010100 License](LICENSE).
+This project is open-source and available under the [Pradip1010100 License](LICENSE.md).
 
 > Developed by [Pradip1010100](https://github.com/Pradip1010100)

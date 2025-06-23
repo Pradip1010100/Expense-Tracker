@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+
+
+    {
+      "type": "java",
+      "name": "Run ExpenseTracker",
+      "request": "launch",
+      "mainClass": "ExpenseTracker",
+      "cwd": "${workspaceFolder}",
+      "classPaths": [
+        "src",
+        "lib/sqlite-jdbc.jar",
+        "lib/jfreechart-1.0.1/lib/jfreechart-1.0.1.jar",
+        "lib/jfreechart-1.0.1/lib/jcommon-1.0.0.jar"
+      ]
+    }
+  ]
+}

@@ -1,8 +1,11 @@
 {
-    "java.project.sourcePaths": ["src"],
-    "java.project.outputPath": "bin",
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar"
-    ],
-    "java.debug.settings.onBuildFailureProceed": true
+  "java.project.referencedLibraries": [
+    "lib/sqlite-jdbc.jar",
+    "lib/jfreechart-1.0.1/lib/jfreechart-1.0.1.jar",
+    "lib/jfreechart-1.0.1/lib/jcommon-1.0.0.jar"
+  ],
+  "java.project.sourcePaths": [
+    "src"
+  ],
+  "java.autobuild.enabled": true
 }

@@ -54,7 +54,7 @@ class SQLiteConnection {
 
     public static void addRecord(String name,String type,double amount,String dt,int cId) {
         String query = "INSERT INTO records(name,type,amount,date,cId) VALUES (?,?,?,?,?);";
-        String q2 = "UPDATE categories SET spent = spent + ? WHERE name = ?;";
+        String q2 = "UPDATE categories SET spent = spent + ? WHERE id = ?;";
         try(Connection connected = DriverManager.getConnection(url)){
             PreparedStatement pstmt = connected.prepareStatement(query);
             pstmt.setString(1, name);
@@ -67,7 +67,7 @@ class SQLiteConnection {
 
             pstmt = connected.prepareStatement(q2);
             pstmt.setDouble(1, amount);
-            pstmt.setString(2,type);
+            pstmt.setInt(2, cId);
             pstmt.executeUpdate();
             System.out.println("Spent Updated");
 
@@ -172,5 +172,187 @@ class SQLiteConnection {
             System.out.println(e.getMessage());
         }
         return categoriesSet.toArray(new String[0][0]);
+    }
+    
+    public static void deleteRecord(String name, String category, String date) {
+        // First get the category ID and amount
+        String getInfoQuery = "SELECT r.amount, r.cId FROM records r " +
+                            "JOIN categories c ON r.cId = c.id " +
+                            "WHERE r.name = ? AND c.name = ? AND r.date = ?;";
+        double amount = 0;
+        int categoryId = -1;
+        
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement stmt = connected.prepareStatement(getInfoQuery)) {
+            
+            stmt.setString(1, name);
+            stmt.setString(2, category);
+            stmt.setString(3, date);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                amount = rs.getDouble("amount");
+                categoryId = rs.getInt("cId");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        // Delete the record
+        String deleteQuery = "DELETE FROM records WHERE name = ? AND cId = ? AND date = ?;";
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement pstmt = connected.prepareStatement(deleteQuery)) {
+            pstmt.setString(1, name);
+            pstmt.setInt(2, categoryId);
+            pstmt.setString(3, date);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        // Update the category's spent amount
+        String updateSpentQuery = "UPDATE categories SET spent = spent - ? WHERE id = ?;";
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement pstmt = connected.prepareStatement(updateSpentQuery)) {
+            pstmt.setDouble(1, amount);
+            pstmt.setInt(2, categoryId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void updateRecord(String originalName, String originalCategory, String originalDate,
+                                  String newName, String newCategory, double newAmount) {
+        // First get the original record's amount and category ID
+        String getInfoQuery = "SELECT r.amount, r.cId FROM records r " +
+                            "JOIN categories c ON r.cId = c.id " +
+                            "WHERE r.name = ? AND c.name = ? AND r.date = ?;";
+        double oldAmount = 0;
+        int oldCategoryId = -1;
+        
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement stmt = connected.prepareStatement(getInfoQuery)) {
+            
+            stmt.setString(1, originalName);
+            stmt.setString(2, originalCategory);
+            stmt.setString(3, originalDate);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                oldAmount = rs.getDouble("amount");
+                oldCategoryId = rs.getInt("cId");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        // Get the new category ID
+        String getNewCategoryIdQuery = "SELECT id FROM categories WHERE name = ?;";
+        int newCategoryId = -1;
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement stmt = connected.prepareStatement(getNewCategoryIdQuery)) {
+            
+            stmt.setString(1, newCategory);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                newCategoryId = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        // Update the record
+        String updateRecordQuery = "UPDATE records SET name = ?, cId = ?, amount = ? " +
+                                 "WHERE name = ? AND cId = ? AND date = ?;";
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement pstmt = connected.prepareStatement(updateRecordQuery)) {
+            pstmt.setString(1, newName);
+            pstmt.setInt(2, newCategoryId);
+            pstmt.setDouble(3, newAmount);
+            pstmt.setString(4, originalName);
+            pstmt.setInt(5, oldCategoryId);
+            pstmt.setString(6, originalDate);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        // Update the old category's spent amount
+        String updateOldSpentQuery = "UPDATE categories SET spent = spent - ? WHERE id = ?;";
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement pstmt = connected.prepareStatement(updateOldSpentQuery)) {
+            pstmt.setDouble(1, oldAmount);
+            pstmt.setInt(2, oldCategoryId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        // Update the new category's spent amount
+        String updateNewSpentQuery = "UPDATE categories SET spent = spent + ? WHERE id = ?;";
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement pstmt = connected.prepareStatement(updateNewSpentQuery)) {
+            pstmt.setDouble(1, newAmount);
+            pstmt.setInt(2, newCategoryId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void updateCategory(String oldName, String newName, String newType) {
+        // First get the category ID
+        String getCategoryIdQuery = "SELECT id FROM categories WHERE name = ?;";
+        int categoryId = -1;
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement stmt = connected.prepareStatement(getCategoryIdQuery)) {
+            
+            stmt.setString(1, oldName);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                categoryId = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+
+        if (categoryId == -1) {
+            System.out.println("Category not found");
+            return;
+        }
+
+        // Update the category
+        String updateCategoryQuery = "UPDATE categories SET name = ?, type = ? WHERE id = ?;";
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement stmt = connected.prepareStatement(updateCategoryQuery)) {
+            
+            stmt.setString(1, newName);
+            stmt.setString(2, newType);
+            stmt.setInt(3, categoryId);
+            stmt.executeUpdate();
+            System.out.println("Category updated successfully");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void deleteCategory(String name) {
+        String query = "DELETE FROM categories WHERE name = ?;";
+        try (Connection connected = DriverManager.getConnection(url);
+             PreparedStatement stmt = connected.prepareStatement(query)) {
+            
+            stmt.setString(1, name);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

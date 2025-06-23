@@ -1,0 +1,263 @@
+# Expense Tracker - Project Documentation
+
+## 1. Abstract
+The Expense Tracker is a Java-based desktop application designed to help users manage their personal finances effectively. It provides a comprehensive solution for tracking income and expenses, categorizing transactions, setting budgets, and analyzing spending patterns through interactive visualizations. The application uses SQLite for data persistence and offers an intuitive graphical user interface built with Java Swing.
+
+## 2. Introduction
+
+### Motivation
+In today's fast-paced world, managing personal finances has become increasingly complex. Many individuals struggle to keep track of their spending and maintain budgets effectively. While there are numerous mobile applications available, there's a need for a lightweight, privacy-focused desktop solution that doesn't require internet connectivity.
+
+### Problem Statement
+- Difficulty in tracking daily expenses and income
+- Lack of categorization for different types of expenses
+- Absence of visual representation of spending patterns
+- Need for budget management and monitoring
+- Requirement for a secure, offline financial tracking solution
+
+### Purpose/Objective and Goals
+- Create a user-friendly interface for expense and income tracking
+- Implement category-based transaction management
+- Provide visual analytics for better financial understanding
+- Enable budget setting and monitoring
+- Ensure data persistence and privacy
+
+### Literature Survey
+Existing expense tracking solutions were analyzed, including:
+- Mobile applications (Mint, YNAB)
+- Spreadsheet-based solutions
+- Web-based financial management tools
+- Desktop financial software (GnuCash, KMyMoney)
+
+### Project Scope and Limitations
+Scope:
+- Personal expense and income tracking
+- Category management
+- Budget setting and monitoring
+- Basic financial analytics
+- Local data storage
+
+Limitations:
+- Single-user system
+- No cloud synchronization
+- Limited to desktop platforms
+- Basic security features
+
+## 3. System Analysis
+
+### Existing Systems
+Current market solutions include:
+- Mobile apps with cloud integration
+- Web-based financial management tools
+- Traditional spreadsheet methods
+- Complex accounting software
+
+### Scope and Limitations of Existing Systems
+- Privacy concerns with cloud-based solutions
+- Internet dependency
+- Complex interfaces
+- High learning curve
+- Cost factors
+
+### Project Perspective and Features
+Features:
+1. Transaction Management
+   - Add/Edit/Delete transactions
+   - Categorization
+   - Date tracking
+   - Type (Income/Expense)
+
+2. Category Management
+   - Custom categories
+   - Category-wise analysis
+
+3. Budget Management
+   - Category-wise budgets
+   - Budget monitoring
+   - Overspending alerts
+
+4. Analytics
+   - Pie charts for expense distribution
+   - Line charts for trend analysis
+   - Bar charts for income vs expenses
+   - Monthly summaries
+
+### Stakeholders
+- Individual users
+- Students
+- Professionals
+- Small business owners
+
+### Requirement Analysis
+
+#### Functional Requirements
+1. Transaction Management
+   - CRUD operations for transactions
+   - Category assignment
+   - Date and time tracking
+   - Amount validation
+
+2. Category Management
+   - Create custom categories
+   - Assign types (Income/Expense)
+   - Track category-wise totals
+
+3. Budget Management
+   - Set category budgets
+   - Monitor spending
+   - Alert on threshold breach
+
+4. Analytics
+   - Generate various charts
+   - Calculate monthly totals
+   - Show spending patterns
+
+#### Performance Requirements
+- Quick response time
+- Efficient data retrieval
+- Smooth chart rendering
+- Low resource consumption
+
+#### Security Requirements
+- Local data storage
+- Data integrity
+- Basic access control
+
+## 4. System Design
+
+### Design Constraints
+- Java SE platform
+- SQLite database
+- Swing GUI framework
+- JFreeChart library
+- Offline functionality
+
+### System Model (OOSE)
+
+#### Class Diagram
+Key Classes:
+- ExpenseTracker (Main class)
+- Record (Transaction management)
+- Category (Category management)
+- Budget (Budget management)
+- Analysis (Analytics)
+- SQLiteConnection (Database operations)
+
+#### Use Case Diagram
+Primary Use Cases:
+- Manage Transactions
+- Manage Categories
+- Set/Monitor Budgets
+- View Analytics
+- Generate Reports
+
+### Data Model
+SQLite Database Tables:
+1. records
+   - id (PRIMARY KEY)
+   - name
+   - type
+   - amount
+   - date
+   - categoryId
+
+2. categories
+   - id (PRIMARY KEY)
+   - name
+   - type
+   - spent
+
+3. budgets
+   - id (PRIMARY KEY)
+   - categoryId
+   - limit
+
+### User Interfaces
+- Main navigation panel
+- Transaction management interface
+- Category management panel
+- Budget setting interface
+- Analytics dashboard
+- Monthly summary display
+
+## 5. Implementation Details
+
+### Software Specifications
+- Java SE Development Kit (JDK) 8 or higher
+- SQLite 3.x
+- JFreeChart 1.5.3
+- IDE: VS Code/Eclipse/IntelliJ
+
+### Hardware Specifications
+Minimum Requirements:
+- Processor: 1.6 GHz or faster
+- RAM: 2 GB
+- Storage: 100 MB free space
+- Display: 1024x768 resolution
+
+## 6. Outputs and Reports Testing
+
+### Test Plan
+1. Unit Testing
+   - Individual component testing
+   - Method-level validation
+
+2. Integration Testing
+   - Component interaction testing
+   - Data flow validation
+
+### Black Box Testing
+1. Input Validation
+   - Transaction amounts
+   - Category names
+   - Date formats
+   - Budget limits
+
+2. Functionality Testing
+   - Transaction operations
+   - Category management
+   - Budget monitoring
+   - Report generation
+
+### White Box Testing
+1. Database Operations
+   - CRUD operations
+   - Data integrity
+   - Transaction handling
+
+2. Business Logic
+   - Calculation accuracy
+   - Category management
+   - Budget tracking
+
+### Test Cases and Results
+[Include specific test cases and their results]
+
+## 7. Conclusion and Recommendations
+The Expense Tracker successfully provides a comprehensive solution for personal finance management. It meets its primary objectives of providing easy transaction management, category-based organization, budget monitoring, and insightful analytics. The application's offline nature ensures privacy while maintaining functionality.
+
+Recommendations:
+- Regular backups of the SQLite database
+- Periodic review of categories and budgets
+- Monthly analysis of spending patterns
+
+## 8. Future Scope
+- Multi-user support
+- Optional cloud synchronization
+- Mobile companion app
+- Advanced reporting features
+- Data export/import capabilities
+- Receipt scanning and attachment
+- Currency conversion support
+- Financial goal setting
+- Investment tracking
+- Bill payment reminders
+
+## 9. Bibliography and References
+1. Java Documentation (https://docs.oracle.com/en/java/)
+2. SQLite Documentation (https://www.sqlite.org/docs.html)
+3. JFreeChart Documentation (https://www.jfree.org/jfreechart/)
+4. Java Swing Tutorial (https://docs.oracle.com/javase/tutorial/uiswing/)
+5. Software Engineering by Ian Sommerville
+6. Design Patterns by Gang of Four
+7. Various online resources and tutorials
